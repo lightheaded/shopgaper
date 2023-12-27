@@ -31,24 +31,31 @@ jobs:
           ECR_REGISTRY: "924802634161.dkr.ecr.eu-west-1.amazonaws.com"
           ECR_REPOSITORY: "shopgaper_repo"
           IMAGE_TAG: latest
+          working-directory: ./shopgaper-backend
         run: |
-          cd shopgaper-backend
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        working-directory: ${{env.working-directory}}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def-1
         uses: aws-actions/amazon-ecs-render-task-definition@v1
+        env:
+          working-directory: ./shopgaper-backend
         with:
           task-definition: ${{ env.ECS_TD }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
+        working-directory: ${{env.working-directory}}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        env:
+          working-directory: ./shopgaper-backend
         with:
           task-definition: ${{ steps.task-def-1.outputs.task-definition }}
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+        working-directory: ${{env.working-directory}}
