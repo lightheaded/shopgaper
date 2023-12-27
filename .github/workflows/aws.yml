@@ -47,7 +47,6 @@ jobs:
           task-definition: ${{ env.ECS_TD }}
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ steps.build-image.outputs.image }}
-        working-directory: ${{env.working-directory}}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
@@ -58,4 +57,3 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
-        working-directory: ${{env.working-directory}}
