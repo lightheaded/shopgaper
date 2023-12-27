@@ -2,7 +2,7 @@ name: Deploy to ECS
 on:
   push:
     branches:
-      - master
+      - main
 env:
   AWS_REGION: eu-west-1
   ECS_CLUSTER: shopgaper_cluster
