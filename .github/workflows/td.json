@@ -1,0 +1,58 @@
+{
+  "taskDefinitionArn": "arn:aws:ecs:eu-west-1:924802634161:task-definition/shopgaper",
+  "containerDefinitions": [
+    {
+      "name": "shopgaper_app",
+      "image": "924802634161.dkr.ecr.eu-west-1.amazonaws.com/shopgaper_repo",
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 80,
+          "hostPort": 80,
+          "protocol": "tcp"
+        }
+      ],
+      "essential": true,
+      "environment": [],
+      "mountPoints": [],
+      "volumesFrom": []
+    }
+  ],
+  "family": "shopgaper",
+  "taskRoleArn": "arn:aws:iam::924802634161:role/ecsTaskExecutionRole",
+  "executionRoleArn": "arn:aws:iam::924802634161:role/ecsTaskExecutionRole",
+  "networkMode": "awsvpc",
+  "volumes": [],
+  "status": "ACTIVE",
+  "requiresAttributes": [
+    {
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "name": "ecs.capability.task-eni"
+    }
+  ],
+  "placementConstraints": [],
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "registeredAt": "2023-12-27T20:46:21.667Z",
+  "registeredBy": "arn:aws:iam::924802634161:user/tom",
+  "tags": []
+}
