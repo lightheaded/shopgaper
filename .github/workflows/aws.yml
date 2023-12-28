@@ -9,8 +9,8 @@ env:
   CONTAINER_NAME: shopgaper_app
   ECS_TD: .github/workflows/td.json
 jobs:
-  deploy:
-    name: Deploy
+  deploy_backend:
+    name: Deploy backend
     runs-on: ubuntu-latest
     environment: production
     steps:
@@ -53,3 +53,19 @@ jobs:
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
+  deploy_frontend:
+    name: Deploy frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@main
+      - uses: jeanlescure/react-deploy-to-s3-action@main
+        with:
+          args: --acl public-read --follow-symlinks --delete
+        env:
+          NODE_ENV: production
+          AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: eu-west-1 # optional: defaults to us-east-1
+          SOURCE_DIR: build
+          CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_ID }}
