@@ -17,6 +17,8 @@ jobs:
       backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
         id: filter
         with:
@@ -25,9 +27,11 @@ jobs:
               - 'shopgaper-backend/**'
             frontend:
               - 'shopgaper-frontend/**'
+            github:
+              - '.github/**'
   deploy_backend:
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.github == 'true' }}
     name: Deploy backend
     runs-on: ubuntu-latest
     environment: production
@@ -73,7 +77,7 @@ jobs:
           wait-for-service-stability: true
   deploy_frontend:
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' }}
+    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.github == 'true' }}
     name: Deploy frontend
     runs-on: ubuntu-latest
     env:
