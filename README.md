@@ -51,4 +51,3 @@ The frontend is a React application, uses Material UI for consistent design.
 ### Backend
 
 The backend is an Express NodeJS application.
-
