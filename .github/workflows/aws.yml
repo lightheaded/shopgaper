@@ -9,7 +9,27 @@ env:
   CONTAINER_NAME: shopgaper_app
   ECS_TD: .github/workflows/td.json
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'shopgaper-backend/**'
+            frontend:
+              - 'shopgaper-frontend/**'
+            github:
+              - '.github/**
   deploy_backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.github == 'true' }}
     name: Deploy backend
     runs-on: ubuntu-latest
     environment: production
@@ -54,6 +74,8 @@ jobs:
           cluster: ${{ env.ECS_CLUSTER }}
           wait-for-service-stability: true
   deploy_frontend:
+    needs: changes
+    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.github == 'true' }}
     name: Deploy frontend
     runs-on: ubuntu-latest
     steps:
@@ -66,6 +88,6 @@ jobs:
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_REGION: eu-west-1 # optional: defaults to us-east-1
+          AWS_REGION: eu-west-1
           SOURCE_DIR: build
           CLOUDFRONT_DISTRIBUTION_ID: ${{ secrets.AWS_CLOUDFRONT_ID }}
