@@ -6,7 +6,7 @@ on:
 env:
   AWS_REGION: eu-west-1
   ECS_CLUSTER: shopgaper_cluster
-  CONTAINER_NAME: app
+  CONTAINER_NAME: shopgaper_app
   ECS_TD: .github/workflows/td.json
 jobs:
   deploy:
@@ -36,7 +36,7 @@ jobs:
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
           echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
-        #working-directory: ${{env.working-directory}}
+        working-directory: ${{env.working-directory}}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def-1
