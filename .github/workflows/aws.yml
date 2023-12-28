@@ -83,13 +83,18 @@ jobs:
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      working-directory: ./shopgaper-backend
+
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
+        working-directory: ${{env.working-directory}}
         run: npm install
       - name: Build
+        working-directory: ${{env.working-directory}}
         run: npm run build
       - name: Deploy
+        working-directory: ${{env.working-directory}}
         uses: reggionick/s3-deploy@v4
         with:
           folder: build
@@ -101,10 +106,10 @@ jobs:
           no-cache: true
           private: true
       - uses: reggionick/s3-deploy@v4
+        working-directory: ${{env.working-directory}}
         with:
           folder: build
           bucket: ${{ secrets.AWS_S3_BUCKET }}
-
         env:
           NODE_ENV: production
           AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
