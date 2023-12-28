@@ -25,11 +25,9 @@ jobs:
               - 'shopgaper-backend/**'
             frontend:
               - 'shopgaper-frontend/**'
-            github:
-              - '.github/**'
   deploy_backend:
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' || needs.changes.outputs.github == 'true' }}
+    if: ${{ needs.changes.outputs.backend == 'true' }}
     name: Deploy backend
     runs-on: ubuntu-latest
     environment: production
@@ -75,7 +73,7 @@ jobs:
           wait-for-service-stability: true
   deploy_frontend:
     needs: changes
-    if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.github == 'true' }}
+    if: ${{ needs.changes.outputs.frontend == 'true' }}
     name: Deploy frontend
     runs-on: ubuntu-latest
     env:
