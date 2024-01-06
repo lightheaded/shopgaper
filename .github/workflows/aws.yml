@@ -96,10 +96,10 @@ jobs:
       - name: Configure AWS Credendtials
         run: |
           pip install awscli
-          aws configure set region eu-west-1
-          aws configure set output json
-          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY }} 
-          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_KEY }}
+          echo aws configure set region eu-west-1
+          echo aws configure set output json
+          echo aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY }} 
+          echo aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_KEY }}
       - name: deploy with s3 sync and Invalidate CloudFront cache
         working-directory: ${{env.working-directory}}
         run: |
