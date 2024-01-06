@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {createTheme, ThemeProvider} from "@mui/material/styles";
 import {Box, Button, Container, TextField, Typography} from "@mui/material";
