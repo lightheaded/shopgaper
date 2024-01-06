@@ -82,8 +82,8 @@ jobs:
     name: Deploy frontend
     runs-on: ubuntu-latest
     env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       working-directory: ./shopgaper-frontend
     steps:
       - uses: actions/checkout@v3
@@ -93,14 +93,15 @@ jobs:
       - name: Build
         working-directory: ${{env.working-directory}}
         run: npm run build
-      - name: Deploy
-        uses: reggionick/s3-deploy@v4
-        with:
-          folder: shopgaper-frontend/build
-          bucket: "shopgaper-production-frontend-origin"
-          bucket-region: "eu-west-1"
-          dist-id: ${{ secrets.AWS_CLOUDFRONT_ID }}
-          invalidation: '*'
-          delete-removed: true
-          no-cache: true
-          private: true
+      - name: Configure AWS Credendtials
+        run: |
+          pip install awscli
+          aws configure set region eu-west-1
+          aws configure set output json
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY }} 
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_KEY }}
+      - name: deploy with s3 sync and Invalidate CloudFront cache
+        working-directory: ${{env.working-directory}}
+        run: |
+          aws s3 sync ./build s3://${{ secrets.AWS_S3_BUCKET }}/
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*"
