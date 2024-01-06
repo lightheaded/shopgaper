@@ -81,6 +81,7 @@ jobs:
     if: ${{ needs.changes.outputs.frontend == 'true' || needs.changes.outputs.github == 'true' }}
     name: Deploy frontend
     runs-on: ubuntu-latest
+    environment: production
     env:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
