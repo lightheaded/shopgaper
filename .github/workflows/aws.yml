@@ -94,6 +94,7 @@ jobs:
         run: npm run build
       - name: Configure AWS Credentials
         run: |
+          python --version
           pip install awscli
           aws configure set region ${{secrets.AWS_REGION}}
           aws configure set output json
