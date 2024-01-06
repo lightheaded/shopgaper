@@ -96,7 +96,7 @@ jobs:
       - name: Deploy
         uses: reggionick/s3-deploy@v4
         with:
-          folder: shopgaper_frontend/build
+          folder: shopgaper-frontend/build
           bucket: ${{ secrets.AWS_S3_BUCKET }}
           bucket-region: "eu-west-1"
           dist-id: ${{ secrets.AWS_CLOUDFRONT_ID }}
