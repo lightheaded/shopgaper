@@ -14,7 +14,7 @@ jobs:
     permissions:
       pull-requests: read
     outputs:
-#      backend: ${{ steps.filter.outputs.backend }}
+      backend: ${{ steps.filter.outputs.backend }}
       frontend: ${{ steps.filter.outputs.frontend }}
       github: ${{ steps.filter.outputs.github }}
     steps:
@@ -90,12 +90,12 @@ jobs:
       AWS_DEFAULT_OUTPUT: json
     steps:
       - uses: actions/checkout@v3
-#      - name: Install dependencies
-#        working-directory: ${{env.working-directory}}
-#        run: npm install
-#      - name: Build
-#        working-directory: ${{env.working-directory}}
-#        run: npm run build
+      - name: Install dependencies
+        working-directory: ${{env.working-directory}}
+        run: npm install
+      - name: Build
+        working-directory: ${{env.working-directory}}
+        run: npm run build
       - name: Install AWS CLI
         run: |
           pip install awscliv2
@@ -103,4 +103,4 @@ jobs:
         working-directory: ${{env.working-directory}}
         run: |
           aws s3 sync ./build s3://${{ secrets.AWS_S3_BUCKET }}/
-          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/Use *"
+          aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*"
