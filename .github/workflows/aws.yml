@@ -102,6 +102,10 @@ jobs:
       - name: Deploy with S3 sync and invalidate CloudFront cache
         working-directory: ${{env.working-directory}}
         run: |
-          test ${{ secrets.AWS_S3_BUCKET }} && echo secrets present || echo secrets missing
+          test ${{ secrets.AWS_S3_BUCKET }} && echo AWS_S3_BUCKET present || echo AWS_S3_BUCKET missing
+          test ${{ secrets.AWS_CLOUDFRONT_ID }} && echo AWS_CLOUDFRONT_ID present || echo AWS_CLOUDFRONT_ID missing
+          test ${{ secrets.AWS_REGION }} && echo AWS_REGION present || echo AWS_REGION missing
+          test ${{ secrets.AWS_ACCESS_KEY }} && echo AWS_ACCESS_KEY present || echo AWS_ACCESS_KEY missing
+          test ${{ secrets.AWS_SECRET_KEY }} && echo AWS_SECRET_KEY present || echo AWS_SECRET_KEY missing
           aws s3 sync ./build s3://${{ secrets.AWS_S3_BUCKET }}/
           aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_ID }} --paths "/*"
